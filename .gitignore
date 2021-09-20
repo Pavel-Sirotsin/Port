@@ -1,0 +1,8 @@
+*.iml
+*.xml
+*.git
+.git/
+.idea/
+out/
+logs/
+target/
