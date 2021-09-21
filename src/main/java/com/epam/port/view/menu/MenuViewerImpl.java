@@ -12,14 +12,14 @@ import java.util.Scanner;
 public class MenuViewerImpl implements com.epam.port.view.menu.MenuViewerAble {
     public static final Logger logger = LogManager.getLogger(MenuViewerImpl.class);
 
-    public void runApp() {
+    public void run() {
         ControllerProvider provider = ControllerProvider.getInstance();
         Controller controller = provider.getController();
         ShowResultToClient result = new ShowResultToClient();
 
         Scanner input = new Scanner(System.in);
 
-        System.out.println(SHOW_MENU);
+        System.out.println(MENU);
 
         while (!input.hasNext(INPUT)) {
             System.err.println(INVALID_MESSAGE);
@@ -28,7 +28,7 @@ public class MenuViewerImpl implements com.epam.port.view.menu.MenuViewerAble {
 
         String request = input.next();
 
-        if (request.equals("4")) {
+        if (request.equals("3")) {
             System.out.println(THANK_YOU);
         } else {
 //            result.show(controller.doAction(request));

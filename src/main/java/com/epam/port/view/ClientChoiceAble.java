@@ -29,7 +29,6 @@ public interface ClientChoiceAble {
             "|usa|belarus|israel|germany|argentina" +
             "|england|mexico|syria|ethiopia|czech republic){1}");
 
-    Map<String, String> chooseByPriceDaysType();
+    Map<String, String> shipRegistration();
 
-    Map<String, String> chooseByCountry();
 }

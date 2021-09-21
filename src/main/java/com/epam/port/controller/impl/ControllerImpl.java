@@ -10,8 +10,6 @@ public class ControllerImpl implements Controller {
 
     @Override
     public String doAction(String operation) {
-        // request form: 'number of operation'
-
         Command current = provider.getCommand(operation);
 
         return current.execute();

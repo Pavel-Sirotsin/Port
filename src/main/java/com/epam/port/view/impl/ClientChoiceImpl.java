@@ -1,7 +1,7 @@
 package com.epam.port.view.impl;
 
 
-import com.epam.travel.view.ClientChoiceAble;
+import com.epam.port.view.ClientChoiceAble;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +13,7 @@ public class ClientChoiceImpl implements ClientChoiceAble {
     private static final Logger logger = LogManager.getLogger(ClientChoiceImpl.class);
 
     @Override
-    public Map<String, String> chooseByPriceDaysType() {
+    public Map<String, String> shipRegistration() {
         Map<String, String> clientChoice = new HashMap<>();
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -48,22 +48,5 @@ public class ClientChoiceImpl implements ClientChoiceAble {
         return clientChoice;
     }
 
-    @Override
-    public Map<String, String> chooseByCountry() {
-        Map<String, String> clientChoice = new HashMap<>();
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println(COUNTRY_MESSAGE);
-            while (!scanner.hasNext(COUNTRY)) {
-                System.err.println(SORRY_COUNTRY_MESSAGE);
-                logger.warn(INVALID_COUNTRY_MESSAGE);
-                scanner.next();
-            }
-            String clientPriceInput = scanner.next();
-            clientChoice.put("country", clientPriceInput);
-            return clientChoice;
-        }
-
-
-    }
 }
