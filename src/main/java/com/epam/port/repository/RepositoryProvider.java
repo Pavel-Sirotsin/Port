@@ -1,19 +1,17 @@
 package com.epam.port.repository;
 
 
-import com.epam.port.repository.data_gen_impl.ContainerDataGenerator;
-import com.epam.port.repository.data_gen_impl.ContainerPlatformDataGenerator;
-import com.epam.port.repository.data_gen_impl.PierDataGenerator;
-import com.epam.port.repository.data_gen_impl.ShipDataGenerator;
+import com.epam.port.repository.data_gen.ContainerDataGenerator;
+import com.epam.port.repository.data_gen.PierDataGenerator;
+import com.epam.port.repository.data_gen.ShipDataGenerator;
 
 public class RepositoryProvider {
 
     private static final RepositoryProvider INSTANCE = new RepositoryProvider();
 
-    DataGeneratorAble shipGenImpl = new ShipDataGenerator();
-    DataGeneratorAble pierGenImpl = new PierDataGenerator();
-    DataGeneratorAble containerGenImpl = new ContainerDataGenerator();
-    DataGeneratorAble storeGenImpl = new ContainerPlatformDataGenerator();
+    private final ShipDataGenerator shipGenImpl = new ShipDataGenerator();
+    private final PierDataGenerator pierGenImpl = new PierDataGenerator();
+    private final ContainerDataGenerator containerGenImpl = new ContainerDataGenerator();
 
 
     private RepositoryProvider() {
@@ -21,6 +19,18 @@ public class RepositoryProvider {
 
     public static RepositoryProvider getInstance() {
         return INSTANCE;
+    }
+
+    public ShipDataGenerator getShipGenImpl() {
+        return shipGenImpl;
+    }
+
+    public PierDataGenerator getPierGenImpl() {
+        return pierGenImpl;
+    }
+
+    public ContainerDataGenerator getContainerGenImpl() {
+        return containerGenImpl;
     }
 
 }

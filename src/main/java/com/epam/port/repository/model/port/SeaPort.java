@@ -1,16 +1,14 @@
-package com.epam.port.repository.model.sea_port;
+package com.epam.port.repository.model.port;
 
-import com.epam.port.repository.model.port_pier.Pier;
+import com.epam.port.repository.model.pier.Pier;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class SeaPort {
+    public static final int PIERS_AMOUNT = 3;
+    private final BlockingQueue<Pier> piers = new ArrayBlockingQueue<>(PIERS_AMOUNT);
     private String name;
-    private static final int PIERS_AMOUNT = 10;
-    private final Semaphore dispatcher = new Semaphore(PIERS_AMOUNT, true);
-    private final List<Pier> piers = new CopyOnWriteArrayList<>();
 
     public SeaPort() {
     }
@@ -27,8 +25,7 @@ public class SeaPort {
         this.name = name;
     }
 
-
-    public List<Pier> getPiers() {
+    public BlockingQueue<Pier> getPiers() {
         return piers;
     }
 
@@ -44,8 +41,7 @@ public class SeaPort {
         } else {
             if (seaPort.name != null) return false;
         }
-        if (piers != null) return piers.equals(seaPort.piers);
-        return seaPort.piers == null;
+        return piers != null ? piers.equals(seaPort.piers) : seaPort.piers == null;
     }
 
     @Override
@@ -57,9 +53,13 @@ public class SeaPort {
 
     @Override
     public String toString() {
-        return "SeaPort{" +
-                "name='" + name + '\'' +
-                ", piers=" + piers +
-                '}';
+        StringBuilder sb = new StringBuilder("SeaPort: ");
+        sb.append(name);
+        sb.append("\n");
+        for (Pier pier : piers) {
+            sb.append(pier);
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

@@ -77,11 +77,7 @@ public class Container {
 
     @Override
     public String toString() {
-        return "Container{" +
-                "theNumber=" + theNumber +
-                ", company='" + company + '\'' +
-                ", type='" + type + '\'' +
-                ", height=" + height +
-                '}';
+        return String.format("Container №: %-5d - Company: %-12s - Type: %-12s - Ft.: %d",
+                theNumber, company, type, height);
     }
 }

@@ -2,7 +2,6 @@ package com.epam.port.view.menu;
 
 import com.epam.port.controller.Controller;
 import com.epam.port.controller.ControllerProvider;
-import com.epam.port.view.impl.ShowResultToClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +14,6 @@ public class MenuViewerImpl implements com.epam.port.view.menu.MenuViewerAble {
     public void run() {
         ControllerProvider provider = ControllerProvider.getInstance();
         Controller controller = provider.getController();
-        ShowResultToClient result = new ShowResultToClient();
 
         Scanner input = new Scanner(System.in);
 
@@ -28,10 +26,10 @@ public class MenuViewerImpl implements com.epam.port.view.menu.MenuViewerAble {
 
         String request = input.next();
 
-        if (request.equals("3")) {
+        if (request.equals("2")) {
             System.out.println(THANK_YOU);
         } else {
-//            result.show(controller.doAction(request));
+            controller.doAction(request);
         }
     }
 }
