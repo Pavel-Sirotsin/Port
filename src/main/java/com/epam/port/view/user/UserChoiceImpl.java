@@ -13,6 +13,7 @@ public class UserChoiceImpl implements UserChoiceAble {
 
     @Override
     public String getMooringPermission(Ship ship) {
+        logger.traceEntry("getMooringPermission");
         System.out.println("\n\"" + ship.getName() + "\"" + ASK_MESSAGE);
         System.out.println(ALLOW_MOORING);
 
@@ -21,13 +22,15 @@ public class UserChoiceImpl implements UserChoiceAble {
             logger.warn(INVALID_MESSAGE);
             scanner.next();
         }
+        String result = scanner.next();
+        logger.traceExit(result);
 
-        return scanner.next();
-
+        return result;
     }
 
     @Override
     public String getUnloadingPermission(Ship ship) {
+        logger.traceEntry("getUnloadingPermission");
         System.out.println("\n\"" + ship.getName() + "\"" + UNLOADING_MESSAGE);
         System.out.println(ALLOW_UNLOADING);
 
@@ -36,7 +39,9 @@ public class UserChoiceImpl implements UserChoiceAble {
             logger.warn(INVALID_MESSAGE);
             scanner.next();
         }
+        String result = scanner.next();
+        logger.traceExit(result);
 
-        return scanner.next();
+        return result;
     }
 }

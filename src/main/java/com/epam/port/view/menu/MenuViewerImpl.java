@@ -12,6 +12,7 @@ public class MenuViewerImpl implements MenuViewerAble {
     public static final Logger logger = LogManager.getLogger(MenuViewerImpl.class);
 
     public void run() {
+        logger.traceEntry("run");
         ControllerProvider provider = ControllerProvider.getInstance();
         Controller controller = provider.getController();
 
@@ -29,7 +30,9 @@ public class MenuViewerImpl implements MenuViewerAble {
         if (request.equals("2")) {
             System.out.println(THANK_YOU);
         } else {
-            controller.doAction(request);
+            controller.doAction();
         }
+
+        logger.traceExit(request);
     }
 }
