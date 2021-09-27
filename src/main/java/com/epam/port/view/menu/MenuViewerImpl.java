@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Scanner;
 
 
-public class MenuViewerImpl implements com.epam.port.view.menu.MenuViewerAble {
+public class MenuViewerImpl implements MenuViewerAble {
     public static final Logger logger = LogManager.getLogger(MenuViewerImpl.class);
 
     public void run() {

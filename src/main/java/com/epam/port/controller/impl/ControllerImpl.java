@@ -6,7 +6,7 @@ import com.epam.port.controller.Controller;
 
 public class ControllerImpl implements Controller {
 
-    private CommandProvider provider = new CommandProvider();
+    private final CommandProvider provider = new CommandProvider();
 
     @Override
     public void doAction(String operation) {

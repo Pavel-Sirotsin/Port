@@ -12,7 +12,7 @@ public class PierDataGenerator {
     public List<Pier> generate() {
         return IntStream
                 .range(0, SeaPort.PIERS_AMOUNT)
-                .mapToObj(i -> new Pier(i))
+                .mapToObj(Pier::new)
                 .collect(Collectors.toList());
     }
 

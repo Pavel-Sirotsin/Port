@@ -15,6 +15,7 @@ public class ViewerProvider {
     private final UserChoiceAble userChoice = new UserChoiceImpl();
     private final MenuViewerAble menuViewer = new MenuViewerImpl();
     private final InfoViewerAble infoViewer = new InfoViewerImpl();
+
     private ViewerProvider() {
     }
 

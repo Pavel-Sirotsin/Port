@@ -14,16 +14,15 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 
 public class PortLogicImpl implements PortLogicAble {
-    private InfoViewerAble info = ViewerProvider.getInstance().getInfoViewer();
-    private UserChoiceAble user = ViewerProvider.getInstance().getUserChoice();
-
-    private volatile String response;
-    private volatile int guess = (int) (Math.random() * 10);
+    private final InfoViewerAble info = ViewerProvider.getInstance().getInfoViewer();
+    private final UserChoiceAble user = ViewerProvider.getInstance().getUserChoice();
 
     public synchronized void releasePermission(AtomicInteger permits, Semaphore dispatcher) {
         if (permits.get() == PortDataImpl.PERMIT) {
@@ -42,7 +41,7 @@ public class PortLogicImpl implements PortLogicAble {
     }
 
     @Override
-    public void acceptPermission(SeaPort port, Ship ship, ReentrantLock locker) throws InterruptedException {
+    public void acceptPermission(SeaPort port, Ship ship, ReentrantLock locker) throws InterruptedException, TimeoutException {
         BlockingQueue<Pier> piers = port.getPiers();
 
         Pier currentPier = piers.take();
@@ -50,7 +49,7 @@ public class PortLogicImpl implements PortLogicAble {
 
         info.showAcceptPermissionResult(ship, currentPier);
 
-        response = user.getUnloadingPermission(ship);
+        String response = user.getUnloadingPermission(ship);
 
         if (response.equalsIgnoreCase("y")) {
             int result = reloadOnPlatform(currentPier, ship);
@@ -98,10 +97,8 @@ public class PortLogicImpl implements PortLogicAble {
         }
     }
 
-    private void reloadOnShip(Ship ship) throws InterruptedException {
-        String name = "\"" + ship.getName() + "\"";
+    private void reloadOnShip(Ship ship) throws InterruptedException, TimeoutException {
         Exchanger<List<Container>> loader = ship.getLoader();
-        ship.setContainers(loader.exchange(ship.getContainers()));
-
+        ship.setContainers(loader.exchange(ship.getContainers(), 10, TimeUnit.SECONDS));
     }
 }

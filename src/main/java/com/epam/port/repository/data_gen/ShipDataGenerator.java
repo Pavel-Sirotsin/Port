@@ -14,14 +14,14 @@ public class ShipDataGenerator {
         String[] names = {"Patrycja", "Armstrong", "Rabia", "Morin"
                 , "Macy", "Dickinson", "Asia", "Finney", "Carla"
                 , "Vance", "Harriett", "Hutton", "Keisha", "Goodman"
-                , "Jozef", "Richmond", "Felicity", "Gunn", "Marianna","Victory"};
+                , "Jozef", "Richmond", "Felicity", "Gunn", "Marianna", "Victory"};
         return names[i];
     }
 
     private String genOwner() {
-        String[] owners = {"Unifeeder A/S", "MAERSK A/S"
-                , "MSC", "Cosco S/L", "3p logistics, JSC"
-        ,"ABS Contractor, JSC", "AFALITA, JSC", "Litinspektus, JSC", "Viasea Shipping"};
+        String[] owners = {"Unified A/S", "MAERSK A/S"
+                , "MSC", "Cosmo S/L", "3p logistics, JSC"
+                , "ABS Contractor, JSC", "AFFLICT, JSC", "Litinspektus, JSC", "Viasea Shipping"};
         return owners[new Random().nextInt(7)];
     }
 

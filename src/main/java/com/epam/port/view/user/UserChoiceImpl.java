@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class UserChoiceImpl implements UserChoiceAble {
     private static final Logger logger = LogManager.getLogger(UserChoiceImpl.class);
-    private  final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     @Override
     public String getMooringPermission(Ship ship) {

@@ -1,7 +1,6 @@
 package com.epam.port.repository.model.pier;
 
 import com.epam.port.repository.model.container.Container;
-import com.epam.port.repository.model.ship.Ship;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,17 +70,8 @@ public class Pier {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Pier №:");
-        sb.append(number);
-        sb.append(" - Assigned ship: ");
-        sb.append(shipName);
-        sb.append("\n");
-        sb.append("Storage platform state: ");
-        sb.append(storagePlatform.size());
-        sb.append(" (");
-        sb.append(PLATFORM_CAPACITY);
-        sb.append(")");
+        return String.format("Pier №: %d - Assigned ship: %s\nStorage platform state: %d (%d)"
+                , number, shipName, storagePlatform.size(), PLATFORM_CAPACITY);
 
-        return sb.toString();
     }
 }

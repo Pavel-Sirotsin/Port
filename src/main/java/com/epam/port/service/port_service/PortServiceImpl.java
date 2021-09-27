@@ -10,6 +10,7 @@ import com.epam.port.view.info.InfoViewerAble;
 import com.epam.port.view.user.UserChoiceAble;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -20,7 +21,6 @@ public class PortServiceImpl implements PortServiceAble {
     private final UserChoiceAble user = ViewerProvider.getInstance().getUserChoice();
     private final PortLogicAble logic = new PortLogicImpl();
 
-    private volatile String response;
     private final AtomicInteger permits = new AtomicInteger(0);
     private final ReentrantLock locker = new ReentrantLock(true);
 
@@ -29,7 +29,6 @@ public class PortServiceImpl implements PortServiceAble {
         Semaphore dispatcher = ship.getDispatcher();
 
         try {
-
             dispatcher.acquire();
             info.showMessage(ship.toString());
 
@@ -37,10 +36,7 @@ public class PortServiceImpl implements PortServiceAble {
 
             askOperatorForAction(port, ship);
 
-            System.out.println();
-
-        } catch (InterruptedException e) {
-
+        } catch (InterruptedException | TimeoutException e) {
             Thread.currentThread().interrupt();
             throw new ServiceException(e);
 
@@ -48,17 +44,16 @@ public class PortServiceImpl implements PortServiceAble {
             if (locker.getHoldCount() != 0) {
                 locker.unlock();
             }
+
             permits.addAndGet(1);
             logic.releasePermission(permits, dispatcher);
         }
 
-
     }
 
-
-    private void askOperatorForAction(SeaPort port, Ship ship) throws InterruptedException {
+    private void askOperatorForAction(SeaPort port, Ship ship) throws InterruptedException, TimeoutException {
         MILLISECONDS.sleep(600);
-        response = user.getMooringPermission(ship);
+        String response = user.getMooringPermission(ship);
 
         if (response.equalsIgnoreCase("y")) {
             logic.acceptPermission(port, ship, locker);

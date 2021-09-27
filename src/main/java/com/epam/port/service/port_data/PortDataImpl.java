@@ -7,20 +7,17 @@ import com.epam.port.repository.model.port.SeaPort;
 import com.epam.port.repository.model.ship.Ship;
 
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.SynchronousQueue;
 
 public class PortDataImpl implements PortDataAble {
     private static final Random RANDOM = new Random();
     public static final int PERMIT = 5;
     private final Exchanger<List<Container>> LOADER = new Exchanger<>();
-    private final Semaphore DISPATCHER = new Semaphore(PERMIT,true);
+    private final Semaphore DISPATCHER = new Semaphore(PERMIT, true);
 
-    private RepositoryProvider provider = RepositoryProvider.getInstance();
+    private final RepositoryProvider provider = RepositoryProvider.getInstance();
 
     @Override
     public SeaPort getPortWithData() {

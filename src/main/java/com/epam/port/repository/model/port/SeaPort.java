@@ -41,13 +41,13 @@ public class SeaPort {
         } else {
             if (seaPort.name != null) return false;
         }
-        return piers != null ? piers.equals(seaPort.piers) : seaPort.piers == null;
+        return piers.equals(seaPort.piers);
     }
 
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (piers != null ? piers.hashCode() : 0);
+        result = 31 * result + piers.hashCode();
         return result;
     }
 

@@ -4,7 +4,6 @@ import com.epam.port.repository.model.container.Container;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
 

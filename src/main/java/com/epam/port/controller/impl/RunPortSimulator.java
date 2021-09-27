@@ -9,7 +9,6 @@ import com.epam.port.service.ServiceProvider;
 import com.epam.port.service.exception.ServiceException;
 import com.epam.port.view.ViewerProvider;
 import com.epam.port.view.info.InfoViewerAble;
-import com.epam.port.view.user.UserChoiceAble;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,11 +20,9 @@ public class RunPortSimulator implements Command {
     private static final String SHIP_WAIT_MESSAGE = String.format("%50s\n%62s", "***** Ship table *****"
             , "(ships coming and connecting to the operator)");
 
-    private PortServiceAble service = ServiceProvider.getInstance().getService();
-    private PortDataAble data = ServiceProvider.getInstance().getData();
-    private InfoViewerAble info = ViewerProvider.getInstance().getInfoViewer();
-    private UserChoiceAble user = ViewerProvider.getInstance().getUserChoice();
-
+    private final PortServiceAble service = ServiceProvider.getInstance().getService();
+    private final PortDataAble data = ServiceProvider.getInstance().getData();
+    private final InfoViewerAble info = ViewerProvider.getInstance().getInfoViewer();
 
     @Override
     public void execute() {
@@ -49,6 +46,5 @@ public class RunPortSimulator implements Command {
         }
 
     }
-
 
 }

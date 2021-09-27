@@ -16,7 +16,7 @@ public class InfoViewerImpl implements InfoViewerAble {
     @Override
     public void showAcceptPermissionResult(Ship ship, Pier pier) throws InterruptedException {
         String name = "\"" + ship.getName() + "\"";
-        MILLISECONDS.sleep(600);
+        MILLISECONDS.sleep(300);
         out.println(name + MOVE_UNLOAD + pier.toString());
         MILLISECONDS.sleep(300);
         out.println(SHIP_CARGO + ship.getContainers().size() + " (" + Ship.CAPACITY + ")");
@@ -27,7 +27,7 @@ public class InfoViewerImpl implements InfoViewerAble {
     public void showDeniedPermissionResult(Ship ship) throws InterruptedException {
         MILLISECONDS.sleep(300);
         out.println(DENIED_DOCK);
-        out.print("\"" + ship.getName() + "\"" + LEAVE_AREA);
+        out.println("\"" + ship.getName() + "\"" + LEAVE_AREA);
     }
 
     @Override
@@ -41,8 +41,8 @@ public class InfoViewerImpl implements InfoViewerAble {
         MILLISECONDS.sleep(300);
         out.println(SHIP_CARGO + ship.getContainers().size() + " (" + Ship.CAPACITY + ")\n");
         MILLISECONDS.sleep(300);
-        out.print(name + LEAVE_AREA);
-        MILLISECONDS.sleep(600);
+        out.println(name + LEAVE_AREA);
+        MILLISECONDS.sleep(300);
     }
 
     @Override
