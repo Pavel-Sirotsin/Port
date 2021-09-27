@@ -15,15 +15,15 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class PortLogicImpl implements PortLogicAble {
     private InfoViewerAble info = ViewerProvider.getInstance().getInfoViewer();
     private UserChoiceAble user = ViewerProvider.getInstance().getUserChoice();
 
     private volatile String response;
+    private volatile int guess = (int) (Math.random() * 10);
 
     public synchronized void releasePermission(AtomicInteger permits, Semaphore dispatcher) {
         if (permits.get() == PortDataImpl.PERMIT) {
@@ -42,44 +42,31 @@ public class PortLogicImpl implements PortLogicAble {
     }
 
     @Override
-    public void acceptPermission(SeaPort port, Ship ship) throws InterruptedException {
+    public void acceptPermission(SeaPort port, Ship ship, ReentrantLock locker) throws InterruptedException {
         BlockingQueue<Pier> piers = port.getPiers();
-        String name = "\"" + ship.getName() + "\"";
-        int result = 0;
 
         Pier currentPier = piers.take();
         currentPier.setShipName(ship.getName());
 
-        MILLISECONDS.sleep(1000);
-        info.showMessage(name + MOVE_UNLOAD + currentPier.toString());
-        MILLISECONDS.sleep(500);
-        info.showMessage(SHIP_CARGO + ship.getContainers().size() + " (" + Ship.CAPACITY + ")");
-        MILLISECONDS.sleep(500);
+        info.showAcceptPermissionResult(ship, currentPier);
 
         response = user.getUnloadingPermission(ship);
 
         if (response.equalsIgnoreCase("y")) {
-            result = reloadOnPlatform(currentPier, ship);
-            MILLISECONDS.sleep(500);
-            info.showMessage(SUCCEED);
-            info.showMessage(DONE + result);
-            MILLISECONDS.sleep(500);
-            info.showMessage(currentPier.toString());
-            MILLISECONDS.sleep(500);
-            info.showMessage(SHIP_CARGO + ship.getContainers().size() + " (" + Ship.CAPACITY + ")\n");
-            MILLISECONDS.sleep(500);
-            info.showMessage(name + LEAVE_AREA);
-            MILLISECONDS.sleep(1000);
+            int result = reloadOnPlatform(currentPier, ship);
+            info.showAcceptUnloadingResult(ship, currentPier, result);
 
         } else {
-            SECONDS.sleep(1);
-            info.showMessage(DENIED_UNLOAD);
-            info.showMessage(name + LEAVE_AREA);
+            info.showDeniedUnloadingResult(ship);
+
+            locker.unlock();
+            reloadOnShip(ship);
+
+            info.showReloadingResult(ship);
 
         }
-
         currentPier.setShipName(EMPTY);
-        piers.offer(currentPier);
+        piers.put(currentPier);
 
     }
 
@@ -93,7 +80,6 @@ public class PortLogicImpl implements PortLogicAble {
         Iterator<Container> iterator = onShip.iterator();
 
         if (availableOnPlatform > availableFromShip) {
-
             for (int i = 0; i < availableFromShip; i++) {
                 Container temp = iterator.next();
                 onPier.add(temp);
@@ -112,14 +98,10 @@ public class PortLogicImpl implements PortLogicAble {
         }
     }
 
-    private void reloadOnShip(Ship ship) {
-        Exchanger loader = ship.getLoader();
-        List<Container> currentShipCargo = ship.getContainers();
-        try {
-            List<Container> containers = (List<Container>) loader.exchange(currentShipCargo);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private void reloadOnShip(Ship ship) throws InterruptedException {
+        String name = "\"" + ship.getName() + "\"";
+        Exchanger<List<Container>> loader = ship.getLoader();
+        ship.setContainers(loader.exchange(ship.getContainers()));
 
     }
 }

@@ -7,9 +7,12 @@ import com.epam.port.repository.model.port.SeaPort;
 import com.epam.port.repository.model.ship.Ship;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.SynchronousQueue;
 
 public class PortDataImpl implements PortDataAble {
     private static final Random RANDOM = new Random();

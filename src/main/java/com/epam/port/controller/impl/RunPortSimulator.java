@@ -39,7 +39,7 @@ public class RunPortSimulator implements Command {
                 @Override
                 public void run() {
                     try {
-                        service.shipAction(port, ship);
+                        service.shipActionFilter(port, ship);
                     } catch (ServiceException e) {
                         logger.throwing(Level.ERROR, e);
                     }

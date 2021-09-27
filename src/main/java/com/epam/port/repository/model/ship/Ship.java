@@ -4,6 +4,7 @@ import com.epam.port.repository.model.container.Container;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
 
@@ -42,11 +43,11 @@ public class Ship extends Thread {
     }
 
 
-    public Exchanger getLoader() {
+    public Exchanger<List<Container>> getLoader() {
         return loader;
     }
 
-    public void setLoader(Exchanger loader) {
+    public void setLoader(Exchanger<List<Container>> loader) {
         this.loader = loader;
     }
 
