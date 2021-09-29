@@ -8,12 +8,14 @@ import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
 
 public class Ship extends Thread {
-    public static final int CAPACITY = 15;
+    public static final int PERMIT = 5;
+    public static final Semaphore DISPATCHER = new Semaphore(PERMIT, true);
+    public static final Exchanger<List<Container>> EXCHANGER = new Exchanger<>();
+    public static final int CAPACITY = 45;
+    private List<Container> containers = new ArrayList<>(CAPACITY);
     private String owner;
     private String destination;
-    private Semaphore dispatcher;
-    private Exchanger<List<Container>> loader;
-    private List<Container> containers = new ArrayList<>(CAPACITY);
+
 
     public Ship(String name) {
         super(name);
@@ -23,6 +25,14 @@ public class Ship extends Thread {
         super(name);
         this.owner = owner;
         this.destination = destination;
+    }
+
+    public List<Container> getContainers() {
+        return containers;
+    }
+
+    public void setContainers(List<Container> containers) {
+        this.containers = containers;
     }
 
     public String getOwner() {
@@ -41,31 +51,6 @@ public class Ship extends Thread {
         this.destination = destination;
     }
 
-
-    public Exchanger<List<Container>> getLoader() {
-        return loader;
-    }
-
-    public void setLoader(Exchanger<List<Container>> loader) {
-        this.loader = loader;
-    }
-
-    public List<Container> getContainers() {
-        return containers;
-    }
-
-    public void setContainers(List<Container> containers) {
-        this.containers = containers;
-    }
-
-    public Semaphore getDispatcher() {
-        return dispatcher;
-    }
-
-    public void setDispatcher(Semaphore dispatcher) {
-        this.dispatcher = dispatcher;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,37 +58,25 @@ public class Ship extends Thread {
 
         Ship ship = (Ship) o;
 
+        if (containers != null) {
+            if (!containers.equals(ship.containers)) return false;
+        } else {
+            if (ship.containers != null) return false;
+        }
         if (owner != null) {
             if (!owner.equals(ship.owner)) return false;
         } else {
             if (ship.owner != null) return false;
         }
-        if (destination != null) {
-            if (!destination.equals(ship.destination)) return false;
-        } else {
-            if (ship.destination != null) return false;
-        }
-        if (dispatcher != null) {
-            if (!dispatcher.equals(ship.dispatcher)) return false;
-        } else {
-            if (ship.dispatcher != null) return false;
-        }
-        if (loader != null) {
-            if (!loader.equals(ship.loader)) return false;
-        } else {
-            if (ship.loader != null) return false;
-        }
-        if (containers != null) return containers.equals(ship.containers);
-        return ship.containers == null;
+        if (destination != null) return destination.equals(ship.destination);
+        return ship.destination == null;
     }
 
     @Override
     public int hashCode() {
-        int result = owner != null ? owner.hashCode() : 0;
+        int result = containers != null ? containers.hashCode() : 0;
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (destination != null ? destination.hashCode() : 0);
-        result = 31 * result + (dispatcher != null ? dispatcher.hashCode() : 0);
-        result = 31 * result + (loader != null ? loader.hashCode() : 0);
-        result = 31 * result + (containers != null ? containers.hashCode() : 0);
         return result;
     }
 

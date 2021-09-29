@@ -11,7 +11,6 @@ import com.epam.port.view.user.UserChoiceAble;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,11 +29,11 @@ public class PortServiceImpl implements PortServiceAble {
     @Override
     public void shipActionFilter(SeaPort port, Ship ship) throws ServiceException {
         logger.traceEntry("shipActionFilter" + port.getName() + " " + ship.getName());
-        Semaphore dispatcher = ship.getDispatcher();
-        logger.debug(dispatcher.toString());
+
+        logger.debug(Ship.DISPATCHER.toString());
 
         try {
-            dispatcher.acquire();
+            Ship.DISPATCHER.acquire();
             info.showMessage(ship.toString());
 
             locker.lock();
@@ -44,7 +43,9 @@ public class PortServiceImpl implements PortServiceAble {
 
         } catch (InterruptedException | TimeoutException e) {
             Thread.currentThread().interrupt();
+            logger.debug(Thread.currentThread().isInterrupted());
             logger.debug(Thread.currentThread().getState());
+
             throw new ServiceException(e);
 
         } finally {
@@ -54,24 +55,27 @@ public class PortServiceImpl implements PortServiceAble {
 
             permits.addAndGet(1);
             logger.debug(permits);
-            logic.releasePermission(permits, dispatcher);
+
+            logic.releasePermission(permits);
         }
-        logger.traceExit(dispatcher.toString());
+
+        logger.traceExit(Ship.DISPATCHER.toString());
     }
 
     private void askOperatorForAction(SeaPort port, Ship ship) throws InterruptedException, TimeoutException {
         logger.traceEntry("askOperatorForAction" + port.getName() + " " + ship.getName());
         MILLISECONDS.sleep(600);
+
         String response = user.getMooringPermission(ship);
         logger.debug(response);
 
         if (response.equalsIgnoreCase("y")) {
-            logic.acceptPermission(port, ship, locker);
+            logic.actionWhenAccept(port, ship, locker);
 
         } else {
             info.showDeniedPermissionResult(ship);
-
         }
+
         logger.traceExit();
     }
 

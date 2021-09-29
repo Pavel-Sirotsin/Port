@@ -25,6 +25,7 @@ public class ControllerImpl implements Controller {
     @Override
     public void doAction() {
         logger.traceEntry("doAction");
+
         SeaPort port = data.getPortWithData();
         List<Ship> ships = data.getShipWithData();
 
@@ -36,13 +37,16 @@ public class ControllerImpl implements Controller {
                 public void run() {
                     try {
                         service.shipActionFilter(port, ship);
+
                     } catch (ServiceException e) {
                         logger.throwing(Level.ERROR, e);
+
                     }
                 }
             }.start();
 
         }
+
         logger.traceExit();
     }
 

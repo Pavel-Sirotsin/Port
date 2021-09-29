@@ -10,49 +10,52 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Exchanger;
-import java.util.concurrent.Semaphore;
 
 public class PortDataImpl implements PortDataAble {
     private static final Logger logger = LogManager.getLogger(PortDataImpl.class);
     private static final Random RANDOM = new Random();
-    public static final int PERMIT = 5;
-    private final Exchanger<List<Container>> LOADER = new Exchanger<>();
-    private final Semaphore DISPATCHER = new Semaphore(PERMIT, true);
 
     private final RepositoryProvider provider = RepositoryProvider.getInstance();
 
     @Override
     public SeaPort getPortWithData() {
         logger.traceEntry("getPortWithData");
+
         SeaPort port = new SeaPort(NAME);
         List<Container> generatedContainers = provider.getContainerGenImpl().generate();
-        List<Pier> piers = provider.getPierGenImpl().generate();
+        List<Pier> generatedPiers = provider.getPierGenImpl().generate();
+
         logger.debug(generatedContainers.isEmpty());
-        logger.debug(piers.isEmpty());
+        logger.debug(generatedPiers.isEmpty());
 
         int value;
         int index;
 
-        for (Pier p : piers) {
+        for (Pier p : generatedPiers) {
             value = RANDOM.nextInt(Pier.PLATFORM_CAPACITY);
             for (int i = 0; i < value; i++) {
                 index = RANDOM.nextInt(generatedContainers.size());
+                logger.debug(index);
+
                 p.getStoragePlatform().add(generatedContainers.get(index));
             }
         }
 
-        port.getPiers().addAll(piers);
+        port.getPiers().addAll(generatedPiers);
+
         logger.debug(port.getPiers().size());
         logger.traceExit(port.getName());
+
         return port;
     }
 
     @Override
     public List<Ship> getShipWithData() {
         logger.traceEntry("getShipWithData");
+
         List<Container> generatedContainers = provider.getContainerGenImpl().generate();
         List<Ship> ships = provider.getShipGenImpl().generate();
+
         logger.debug(generatedContainers.isEmpty());
         logger.debug(ships.isEmpty());
 
@@ -63,14 +66,13 @@ public class PortDataImpl implements PortDataAble {
             value = RANDOM.nextInt(Ship.CAPACITY);
             for (int i = 0; i < value; i++) {
                 index = RANDOM.nextInt(generatedContainers.size());
+                logger.debug(index);
+
                 s.getContainers().add(generatedContainers.get(index));
             }
-            logger.debug(LOADER.toString());
-            s.setLoader(LOADER);
-            logger.debug(DISPATCHER.toString());
-            s.setDispatcher(DISPATCHER);
 
         }
+
         logger.traceExit(ships.size());
         return ships;
 

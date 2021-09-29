@@ -45,7 +45,6 @@ public class ShipDataGenerator {
         return result;
     }
 
-
     public List<Ship> generate() {
         logger.traceEntry("generate");
         return IntStream

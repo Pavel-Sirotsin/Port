@@ -13,7 +13,7 @@ public interface PortLogicAble {
     String EMPTY = "free";
     String THAT_ALL = String.format("\n%60s", "My Congratulations! You've done it!");
 
-    void releasePermission(AtomicInteger permits, Semaphore dispatcher);
+    void releasePermission(AtomicInteger permits);
 
-    void acceptPermission(SeaPort port, Ship ship, ReentrantLock locker) throws InterruptedException, TimeoutException;
+    void actionWhenAccept(SeaPort port, Ship ship, ReentrantLock locker) throws InterruptedException, TimeoutException;
 }

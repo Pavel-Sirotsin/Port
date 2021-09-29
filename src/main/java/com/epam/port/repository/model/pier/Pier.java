@@ -19,6 +19,12 @@ public class Pier {
         this.number = number;
     }
 
+    public Pier(int number, String shipName, List<Container> storagePlatform) {
+        this.number = number;
+        this.shipName = shipName;
+        this.storagePlatform = storagePlatform;
+    }
+
     public int getNumber() {
         return number;
     }
